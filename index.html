@@ -1,0 +1,272 @@
+<html>
+<title>
+
+</title>
+<head>	
+<style>
+
+#area {
+ 
+     position:relative;
+   }
+  #cBase{
+     width: 200px;
+     height: 200px;     
+     border-radius: 200px;      
+     display: inline-block;
+     position:absolute;
+   }
+   #cl1, #cl2 , #animacion{
+    
+     border-radius: 500px;
+     border:solid 2px black;
+     position:absolute;
+     display: inline-block;
+   }
+
+#animacion{
+     position:absolute;
+     width: 100%;
+     display: inline-block;
+   }
+
+   #btn{
+     position:absolute;
+     border-radius: 400px;
+     z-index: 1;
+    }
+  #vida{
+    display: inline-block;
+    float: right;
+   }
+  #vida li{
+    list-style: none;
+    display: inline-block;
+    float:left;
+  }
+
+</style>
+</head>
+
+<body>
+<button id="inicio">Inicio</button>
+ 
+<div id="cuenta">0</div>
+ <ul id="vida">
+   <li>♥</li>
+   <li>♥</li>
+   <li>♥</li> 
+ </ul> 
+<div id="area">
+
+</div>
+ 
+
+</body>
+<script>
+    var vida=document.getElementById("vida");
+    var circuloB=document.getElementById("circulo");
+    var btnc=document.getElementById("inicio");
+    var puntuacion=0;
+    btnc.addEventListener("click",crear);    
+   var ii=0;
+   var tt=0;
+
+
+function eventos(x){
+  comparalimites();
+  remover(x);
+  crear();   
+  animar(x);
+}
+
+setInterval(animar,100);
+
+
+function crear(){
+     //declaracion de avriables y creacion de las etiquetas
+     let area = document.getElementById("area");
+     let cBase = document.createElement("div");//circulo Base
+     let cl1   = document.createElement("div"); //limite primero
+     let cl2   = document.createElement("div");//limite secundario
+     let animacion = document.createElement("div");//circulo animacion
+     let btn       = document.createElement("button"); //boton
+     let texto = document.createTextNode("x");
+     let tamano=Math.floor(Math.random() * (200 + 100))+100 ;
+     //incorporacion de las etiquetas 
+     btn.appendChild(texto);
+     area.appendChild(cBase);
+     cBase.appendChild(cl1);
+     area.appendChild(animacion);
+      
+     cl1.appendChild(cl2);
+     cl2.appendChild(btn);
+     
+     //asignacion de ID para cada etiqueta creada
+     cBase.setAttribute("id","cBase");
+     cl1.setAttribute("id","cl1");
+     cl2.setAttribute("id","cl2");
+     btn.setAttribute("id","btn");
+     animacion.setAttribute("id","animacion");
+     btn.setAttribute("onclick","eventos(this)");
+      
+     //posicion y tamaño
+     let tt=Math.floor(Math.random() * 300);
+     let tl=Math.floor(Math.random() * 400);
+     cBase.style.top=tt;
+     cBase.style.left=tl;
+     animacion.style.top=tt;
+     animacion.style.left=tl;
+     
+     cBase.style.width=tamano;
+     cBase.style.height=tamano;
+     animacion.style.width=tamano;
+     animacion.style.height=tamano;
+     let color= Math.floor(Math.random() * 4);
+     colores(color);    
+  
+     dimencion(cBase ,cl1);      
+     dimencion2(cl1, cl2);
+     dimencion2(cl2, btn);    
+     
+   }
+function dimencion(x, y){
+     //dimencion del primer limite y posicionamiento centrado
+     let tam= x.clientWidth;
+     let porciento=Math.floor(Math.random() * (100 - 70)) + 70;         
+     y.style.width=porciento+"%";
+     y.style.height=porciento+"%";
+     let p=y.clientWidth;   
+     y.style.top=(tam/2)- (p/2);
+     y.style.left=(tam/2)- (p/2);
+}
+function dimencion2(x, y){
+     //dimencion del primer Segundo limite  y posicionamiento centrado el -2 es compensacion
+     let tam= x.clientWidth;
+     let porciento=Math.floor(Math.random() * (90 - 80)) + 85;     
+     y.style.width=porciento+"%";
+     y.style.height=porciento+"%";
+     let p=y.clientWidth;
+     y.style.top=(tam/2)- (p/2) - 2;
+     y.style.left=(tam/2)- (p/2) - 2;
+}
+
+
+function remover(x){
+     //alert(x.parentNode.parentNode.parentNode.parentNode.parentNode.innerHTML);
+     x.parentNode.parentNode.parentNode.parentNode.removeChild(x.parentNode.parentNode.parentNode);
+     let area = document.getElementById("area");
+     let anima = document.getElementById("animacion");
+     area.removeChild(anima);    
+}
+
+function comparalimites(){
+     let cl1   = document.getElementById("cl2");; //limite primero
+     let cl2   = document.getElementById("btn");//limite secundario
+     let animacion=document.getElementById("animacion");  
+    // alert("cl1 = " + cl1.clientWidth +"\n cl2 = "+cl2.clientWidth +"\n animacion = "+animacion.clientWidth);
+    // alert("cl1 = " + typeof(cl1.clientWidth) +"\n cl2 = "+typeof(cl2.clientWidth) +"\n animacion = "+typeof(cl1.clientWidth));
+     let t1=cl1.clientWidth;
+     let t2=cl2.clientWidth;
+     let t3=animacion.clientWidth;
+     if( t3<t1  && t3 > t2 ){
+        puntua();         
+    } 
+    else{
+      vidas();
+    }  
+}
+
+function animar(x){ 
+     let animacion=document.getElementById("animacion");
+     let reduccion=animacion.clientWidth-8; // este tiempo es relacionado a las variable fff y d estas requieren estar por mitad par hacer un buen centrado
+     animacion.style.width=reduccion;
+     animacion.style.height=reduccion;
+     ii=animacion.style.left ;
+     ttt=animacion.style.top ;
+     let d=parseInt(ii);
+     let fff=parseInt(ttt);
+     fff +=4;  
+     d+=4;
+     animacion.style.left =  d;       
+     animacion.style.top =  fff;      
+   /////////////////////////////// creacion de condicion
+     let zx=(animacion.style.height *0)  + "100";
+
+  if(animacion.clientWidth  < 100 	  ){
+      
+     removerx();
+     crear();   
+  }
+}
+function removerx(){  //provisional se puede remplazar por la funcion remover             
+       let area = document.getElementById("area");
+       let cBase= document.getElementById("cBase");
+       let anima = document.getElementById("animacion");
+       area.removeChild(cBase);
+       area.removeChild(anima);
+     }
+     //se crea el elemento animacion junto con su estilo
+function colores(x){
+      let c=document.getElementById("cl2");
+     
+      switch(x){
+      case 0: c.style.backgroundColor="red";
+      break;
+      case 1: c.style.backgroundColor="blue";
+      break;
+      case 2: c.style.backgroundColor="green";
+      break;
+      case 3: c.style.backgroundColor="pink";
+      break;
+  }
+
+}
+function vidas(){
+      let vida= document.getElementById("vida");
+      let lis=document.getElementsByTagName("li");
+      if(lis.length > 0){
+        vida.removeChild(vida.childNodes[0]);
+      }
+      else{
+      removerx();
+      }
+      
+}
+
+function puntua(){
+ 
+ 
+      let c=document.getElementById("cl2");
+      var x=document.getElementById("cuenta");
+      let anima = document.getElementById("animacion");
+       
+     // alert(c.style.backgroundColor);
+      if(c.style.backgroundColor == "red"){
+         puntuacion +=animacion.clientWidth * 1.1 ; 
+	x.innerHTML=  puntuacion;
+         
+      }
+       if(c.style.backgroundColor == "blue"){
+         puntuacion +=animacion.clientWidth * 1.1 ; 
+	x.innerHTML=  puntuacion;
+      }
+       if(c.style.backgroundColor == "green"){
+         puntuacion +=animacion.clientWidth * 1.1 ; 
+	x.innerHTML=  puntuacion;
+      }
+       if(c.style.backgroundColor == "pink"){
+         puntuacion +=animacion.clientWidth * 1.1 ; 
+	x.innerHTML=  puntuacion; 
+      }
+ 
+
+ 
+
+}
+
+</script>
+
+
+</html>
+ 
